@@ -1,0 +1,5 @@
+name: UserInterfaceLib
+main: org.userinterfacelib.main.UserInterfaceLib
+depend: [GeneralLib]
+version: 2.0.1
+author: wysohn
