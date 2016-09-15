@@ -1,6 +1,7 @@
 package org.userinterfacelib.main;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,12 +9,15 @@ import java.util.Queue;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
-import org.generallib.serializetools.FileSerialize;
-import org.generallib.serializetools.exceptions.FileSerializeException;
 
-public class LanguageSupport extends FileSerialize{
+public class LanguageSupport{
+	private final File file;
+	private final FileConfiguration config;
+	
 	private UserInterfaceLib plugin;
 	private String lang;
 	
@@ -22,19 +26,34 @@ public class LanguageSupport extends FileSerialize{
 	private Queue<String> string = new LinkedList<String>();
 	private Queue<Boolean> bool = new LinkedList<Boolean>();
 	
-	LanguageSupport(File dbPath, String name) throws FileSerializeException{
-		super(dbPath, name);
-	}
-	
-	LanguageSupport(Plugin plugin, String lang) throws FileSerializeException{
-		this(new File(plugin.getDataFolder(), "lang"), lang+".yml");
-		
+	LanguageSupport(Plugin plugin, String lang) throws IOException, InvalidConfigurationException{
 		Validate.notNull(lang);
+		
+		File folder = new File(plugin.getDataFolder(), "lang");
+		if(!folder.exists())
+			folder.mkdirs();
+		
+		file = new File(folder, lang+".yml");
+		if(!file.exists())
+			file.createNewFile();
+		
+		config = new YamlConfiguration();
 		
 		this.plugin = (UserInterfaceLib) plugin;
 		this.lang = lang;
 		
+		config.load(file);
+		
 		fillIfEmpty();
+	}
+	
+	private Object load(String key){
+		return config.get(key);
+	}
+	
+	private void save(String key, Object value) throws IOException{
+		config.set(key, value);
+		config.save(file);
 	}
 	
 	private void fillIfEmpty(){
@@ -48,7 +67,7 @@ public class LanguageSupport extends FileSerialize{
 						add(lang.getDefault());
 						}});
 					Bukkit.getLogger().info("Added language setting "+str);
-				} catch (FileSerializeException e) {
+				} catch (IOException e) {
 					Bukkit.getLogger().info("Could not fill empty string "+str);
 					e.printStackTrace();
 				}

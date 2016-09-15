@@ -1,5 +1,7 @@
 package org.userinterfacelib.main;
 
+import java.io.IOException;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -7,11 +9,11 @@ import javax.script.ScriptException;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.generallib.serializetools.exceptions.FileSerializeException;
 import org.userinterfacelib.main.LanguageSupport.Languages;
 import org.userinterfacelib.manager.GUIManager;
 import org.userinterfacelib.manager.Manager;
@@ -50,13 +52,13 @@ public class UserInterfaceLib extends JavaPlugin{
 		PLUGIN_NAME = this.getDescription().getFullName();
 		
 		config = new UserInterfaceLibConfig(this);
+
 		try {
 			lang = new LanguageSupport(this, config.lang);
-		} catch (FileSerializeException e) {
-			e.printStackTrace();
-			this.setEnabled(false);
-			return;
+		} catch (IOException | InvalidConfigurationException e1) {
+			e1.printStackTrace();
 		}
+
 		cmdExe = new CommandExecutor(this);
 		
 		if(!config.isPluginEnabled){
