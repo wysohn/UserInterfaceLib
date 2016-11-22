@@ -1,5 +1,6 @@
 package org.userinterfacelib.constants.button;
 
+import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,12 +14,15 @@ import org.userinterfacelib.main.LanguageSupport.Languages;
 
 public class FirstButton extends Button {
 
-	public FirstButton(Frame parent, int index) {
-		super(parent, index, new ItemStack(Material.WOOL, 1, DyeColor.RED.getData()));
+	@SuppressWarnings("deprecation")
+	public FirstButton(Frame parent) {
+		super(parent, new ItemStack(Material.WOOL, 1, (short) 14));
 
 		ClickEventHandler handler = new ClickEventHandler();
 		this.setLeftClickEventHandler(handler);
 		this.setRightClickEventHandler(handler);
+		
+		this.updateDisplayName(ChatColor.RED+"<<");
 	}
 	
 	private class ClickEventHandler implements ButtonLeftClickEventHandler, ButtonRightClickEventHandler{
@@ -29,7 +33,7 @@ public class FirstButton extends Button {
 				return;
 			
 			PageNodeFrame pagedFrame = (PageNodeFrame) frame;
-			PageNodeFrame firstFrame = PageNodeFrame.getFirst(pagedFrame);
+			PageNodeFrame firstFrame = pagedFrame.manager.getHead();
 			if(firstFrame != null){
 				firstFrame.showTo(player);
 			}else{

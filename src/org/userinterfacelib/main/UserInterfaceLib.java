@@ -7,13 +7,22 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.userinterfacelib.constants.button.Button;
+import org.userinterfacelib.constants.frame.ButtonPageFrame;
+import org.userinterfacelib.constants.frame.ItemPageFrame;
+import org.userinterfacelib.constants.frame.PageNodeFrame;
+import org.userinterfacelib.constants.handlers.button.ButtonLeftClickEventHandler;
+import org.userinterfacelib.constants.handlers.frame.FrameCloseEventHandler;
 import org.userinterfacelib.main.LanguageSupport.Languages;
 import org.userinterfacelib.manager.GUIManager;
 import org.userinterfacelib.manager.Manager;
@@ -31,9 +40,96 @@ public class UserInterfaceLib extends JavaPlugin{
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
 
-		cmdExe.onCommand(sender, command, label, args);
+		if(sender.isOp() && command.getName().equals("uil")){
+/*			ItemStack[] items = new ItemStack[100];
+			for(int i = 0; i < 100; i++){
+				if(i % 10 == 0)
+					items[i] = null;
+				else
+					items[i] = new ItemStack(Material.APPLE);
+			}
+			final ItemPageFrame f = new ItemPageFrame("test", items);
+			f.setCloseEventHandler(new FrameCloseEventHandler(){
+				@Override
+				public void onClose(Player player) {
+					ItemStack[] items2 = f.getItems();
+					
+					for(int i = 0; i < items2.length - 1; i += 9){
+						String temp = "";
+						for(int j = i; j < i + 9; j++)
+							temp += items2[j] != null ? items2[j].getTypeId()+" " : "-1 ";
+						player.sendMessage(i+". "+temp);
+					}
+				}
+			});
+			f.showTo((Player) sender);*/
+			
+			Button[] items = new Button[100];
+			for(int i = 0; i < 100; i++){
+				if(i % 10 == 0)
+					items[i] = null;
+				else
+					items[i] = new Button(null, new ItemStack(Material.APPLE)){{
+						this.setLeftClickEventHandler(new ButtonLeftClickEventHandler(){
+							@Override
+							public void onClick(Player player) {
+								player.sendMessage("click!");
+							}
+						});
+					}};
+			}
+			final ButtonPageFrame f = new ButtonPageFrame("test", items);
+			f.setCloseEventHandler(new FrameCloseEventHandler(){
+				@Override
+				public void onClose(Player player) {
+					Button[] items2 = f.getItems();
+					
+					for(int i = 0; i < items2.length - 1; i += 9){
+						String temp = "";
+						for(int j = i; j < i + 9; j++)
+							temp += items2[j] != null ? items2[j].getIS().getTypeId()+" " : "-1 ";
+						player.sendMessage(i+". "+temp);
+					}
+				}
+			});
+			f.showTo((Player) sender);
+		}
 		
 		return true;
+	}
+	
+	private void debug(){
+		ItemStack[] items = new ItemStack[100];
+		for(int i = 0; i < 100; i++){
+			if(i % 10 == 0)
+				items[i] = null;
+			else
+				items[i] = new ItemStack(Material.APPLE);
+		}
+		
+		ItemPageFrame f = new ItemPageFrame("test", items);
+		
+		PageNodeFrame node = f.getHead();
+		prettyPrint(node.getInventory());
+		while((node = node.getNext()) != null)
+			prettyPrint(node.getInventory());
+	}
+	
+	private void prettyPrint(Inventory inv){
+		getLogger().info("----------"+inv.getName()+"----------");
+		StringBuilder builder = new StringBuilder();;
+		for(int i = 0; i < inv.getSize(); i++){
+			if(inv.getItem(i) != null)
+				builder.append(inv.getItem(i).getTypeId()+" ");
+			else
+				builder.append("-1 ");
+			
+			if(i % 9 == 0){
+				getLogger().info(builder.toString());
+				builder = new StringBuilder();
+			}
+		}
+		getLogger().info("----------"+inv.getName()+"----------");
 	}
 
 	@Override

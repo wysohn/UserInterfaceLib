@@ -2,14 +2,11 @@ package org.userinterfacelib.constants.frame;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.userinterfacelib.constants.FrameEventHandler;
 import org.userinterfacelib.constants.button.Button;
 import org.userinterfacelib.constants.handlers.frame.FrameCloseEventHandler;
@@ -66,8 +63,18 @@ public abstract class Frame implements FrameEventHandler{
 	public ChestSize getSize() {
 		return size;
 	}
+	
+	/**
+	 * @deprecated now manually specify index {@link #setButton(int, Button)}
+	 * @param btn
+	 */
+	@Deprecated
 	public void setButton(Button btn){
 		buttons[btn.getIndex()] = btn;
+	}
+	
+	public void setButton(int index, Button btn){
+		buttons[index] = btn;
 	}
 	
 	public Button getButton(int index){
@@ -106,7 +113,7 @@ public abstract class Frame implements FrameEventHandler{
 		}
 	}
 	
-	protected Inventory getInventory(){
+	public Inventory getInventory(){
 		return instance;
 	}
 	
@@ -124,14 +131,10 @@ public abstract class Frame implements FrameEventHandler{
 	public void handleEvent(InventoryEvent e){
 		if(e instanceof InventoryClickEvent){
 			int rawSlot = ((InventoryClickEvent) e).getRawSlot();
-			for(Button button : buttons){
-				if(button == null || button.getIndex() != rawSlot){
-					continue;
-				}
-				else{
+			if(rawSlot >= 0 && rawSlot < buttons.length){
+				Button button = buttons[rawSlot];
+				if(button != null)
 					button.handleEvent((InventoryClickEvent) e);
-					return;
-				}
 			}
 		}else if(e instanceof InventoryCloseEvent){
 			if(closeEventHandler == null)

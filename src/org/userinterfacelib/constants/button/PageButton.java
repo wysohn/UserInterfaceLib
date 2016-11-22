@@ -6,8 +6,8 @@ import org.userinterfacelib.constants.frame.Frame;
 
 public class PageButton extends Button{
 
-	public PageButton(Frame parent, int index) {
-		super(parent, index, new ItemStack(Material.BOOK_AND_QUILL, 1));
+	public PageButton(Frame parent) {
+		super(parent, new ItemStack(Material.BOOK_AND_QUILL, 1));
 		// TODO Auto-generated constructor stub
 	}
 

@@ -1,23 +1,25 @@
 package org.userinterfacelib.constants.button;
 
+import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Wool;
 import org.userinterfacelib.constants.frame.Frame;
 import org.userinterfacelib.constants.frame.PageNodeFrame;
 import org.userinterfacelib.constants.handlers.button.ButtonLeftClickEventHandler;
 import org.userinterfacelib.constants.handlers.button.ButtonRightClickEventHandler;
-import org.userinterfacelib.main.UserInterfaceLib;
-import org.userinterfacelib.main.LanguageSupport.Languages;
 
 public class PreviousButton extends Button {
-	public PreviousButton(Frame parent, int index) {
-		super(parent, index, new ItemStack(Material.WOOL, 1, DyeColor.ORANGE.getData()));
+	public PreviousButton(Frame parent) {
+		super(parent, new ItemStack(Material.WOOL, 1, (short) 1));
 
 		ClickEventHandler handler = new ClickEventHandler();
 		this.setLeftClickEventHandler(handler);
 		this.setRightClickEventHandler(handler);
+		
+		this.updateDisplayName(ChatColor.RED+"<");
 	}
 
 	private class ClickEventHandler implements ButtonLeftClickEventHandler, ButtonRightClickEventHandler{
@@ -32,7 +34,7 @@ public class PreviousButton extends Button {
 			if(previousFrame != null){
 				previousFrame.showTo(player);
 			}else{
-				UserInterfaceLib.sendMessage(player, Languages.Button_PagedFrame_OutOfBound);
+				//UserInterfaceLib.sendMessage(player, Languages.Button_PagedFrame_OutOfBound);
 			}
 		}
 	}

@@ -13,8 +13,9 @@ import org.userinterfacelib.constants.handlers.button.ButtonShiftLeftClickEventH
 import org.userinterfacelib.constants.handlers.button.ButtonShiftRightClickEventHandler;
 
 public abstract class Button {
-	private transient final Frame parent;
-	private transient final int index;
+	private transient Frame parent;
+	@Deprecated
+	private transient int index;
 	private transient final ItemStack IS;
 
 	private transient ButtonLeftClickEventHandler leftClickEventHandler;
@@ -22,41 +23,67 @@ public abstract class Button {
 	private transient ButtonShiftLeftClickEventHandler shiftLeftClickEventHandler;
 	private transient ButtonShiftRightClickEventHandler shiftRightClickEventHandler;
 	
+	/**
+	 * @deprecated now don't save index in Button. use {@link #Button(Frame, ItemStack)}
+	 * @param parent
+	 * @param index
+	 * @param IS
+	 */
+	@Deprecated
 	public Button(Frame parent, int index, ItemStack IS){
 		this.parent = parent;
 		this.index = index;
 		this.IS = IS;
 	}
+	
+	public Button(Frame parent, ItemStack IS){
+		this.parent = parent;
+		this.IS = IS;
+	}
+	
+	public void setParent(Frame parent){
+		this.parent = parent;
+	}
+	
 	public Frame getParent() {
 		return parent;
 	}
+	
+	@Deprecated
 	public int getIndex() {
 		return index;
 	}
+	
 	public ItemStack getIS() {
 		return IS;
 	}
-	public void updateDisplayName(String displayName){
+	public Button updateDisplayName(String displayName){
 		ItemMeta IM = IS.getItemMeta();
 		IM.setDisplayName(displayName);
 		IS.setItemMeta(IM);
+		return this;
 	}
-	public void updateLore(List<String> lore){
+	public Button updateLore(List<String> lore){
 		ItemMeta IM = IS.getItemMeta();
 		IM.setLore(lore);
 		IS.setItemMeta(IM);
+		return this;
 	}
-	public void setLeftClickEventHandler(ButtonLeftClickEventHandler leftClickEventHandler) {
+	public Button setLeftClickEventHandler(ButtonLeftClickEventHandler leftClickEventHandler) {
 		this.leftClickEventHandler = leftClickEventHandler;
+		return this;
 	}
-	public void setRightClickEventHandler(ButtonRightClickEventHandler rightClickEventHandler) {
+	public Button setRightClickEventHandler(ButtonRightClickEventHandler rightClickEventHandler) {
 		this.rightClickEventHandler = rightClickEventHandler;
+		return this;
 	}
-	public void setShiftLeftClickEventHandler(ButtonShiftLeftClickEventHandler shiftLeftClickEventHandler) {
+	public Button setShiftLeftClickEventHandler(ButtonShiftLeftClickEventHandler shiftLeftClickEventHandler) {
 		this.shiftLeftClickEventHandler = shiftLeftClickEventHandler;
+		return this;
 	}
-	public void setShiftRightClickEventHandler(ButtonShiftRightClickEventHandler shiftRightClickEventHandler) {
+	public Button setShiftRightClickEventHandler(ButtonShiftRightClickEventHandler shiftRightClickEventHandler) {
 		this.shiftRightClickEventHandler = shiftRightClickEventHandler;
+		return this;
 	}
 	public void handleEvent(InventoryClickEvent e){
 		e.setCancelled(true);

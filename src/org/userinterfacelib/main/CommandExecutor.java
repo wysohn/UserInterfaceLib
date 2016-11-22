@@ -14,8 +14,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.userinterfacelib.command.SubCommand;
-import org.userinterfacelib.command.admin.SubCommandAdmin;
-import org.userinterfacelib.command.user.SubCommandUser;
 import org.userinterfacelib.command.user.SubCommandUserAdmin;
 import org.userinterfacelib.main.LanguageSupport.Languages;
 
@@ -25,9 +23,11 @@ public class CommandExecutor {
 	 */
 	public static final String MAINCOMMAND = "userinterfacelib";
 	
+	@SuppressWarnings("serial")
 	private static final List<SubCommand> commands = new ArrayList<SubCommand>(){{
 		add(new SubCommandUserAdmin());
 	}};
+	@SuppressWarnings("serial")
 	private static final List<SubCommand> admincommands = new ArrayList<SubCommand>(){{
 		
 	}};	

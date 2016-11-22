@@ -1,15 +1,12 @@
 package org.userinterfacelib.manager;
 
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.userinterfacelib.constants.frame.Frame;
